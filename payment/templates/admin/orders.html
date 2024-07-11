@@ -1,0 +1,72 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% load bootstrap5 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+
+<!-- Header-->
+ <body class="container-fluid d-block">
+    <div class="d-flex" >
+        <div class="d-inline-block mt-3" >
+            {% include 'account_info.html' %}
+        </div>
+        <div class="container">
+            <div class="row">
+                <centre>
+                    <div class="col-8">
+                        <br/><br/>
+                        <div class="card">
+                        <div class="card-header">
+                            Order {{ order.id}} - ${{order.amount_paid}}
+                        </div>
+                        <div class="card-body">
+                            Email: {{ order.email}}<br/>
+                            {% if order.date_shipped %}
+                            Date Shipped: {{ order.date_shipped}}
+                            {% else %}
+                            Date Ordered: {{ order.date_ordered}}
+                            {% endif %}
+                            <br/><br/>
+                            Name:{{ order.full_name }}<br/>
+                            <pre>{{ order.shipping_address }}
+                            </pre>
+                            {% for item in items %}
+                            {{ item.product }} - {{ item.quantity }} - ${{ item.price }}<br/>
+        
+                            {% endfor %}
+                            <br/><br/>
+                            {% if not order.delivered %}
+                            <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="delivary_status" value="true">
+                            <button type="Submit" class="btn btn-success">Mark As Shipped</button>
+                            </from>
+        
+                            {% else %}
+                            <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="delivery_status" value="false">
+                            <button type="Submit" class="btn btn-danger">Mark As Not Shipped</button>
+                            </from>
+        
+                            {% endif %}
+        
+                        </div>
+                        </div>
+                        <br/>
+        
+                        <br/><br/>
+                    </div>
+                </centre>
+            </div>
+        </div>
+    </div>
+ </body>
+
+
+{% endblock %}
